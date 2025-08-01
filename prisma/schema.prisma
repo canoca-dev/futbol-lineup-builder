@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lineups       Lineup[]
+  customPlayers Player[] @relation("UserCustomPlayers")
+  favorites     PlayerFavorite[]
+
+  @@map("users")
+}
+
+model League {
+  id        Int      @id @default(autoincrement())
+  name      String
+  code      String   @unique
+  country   String?
+  season    String?
+  logo      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teams   Team[]
+  players Player[]
+
+  @@map("leagues")
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  name      String
+  shortName String?
+  tla       String?
+  logo      String?
+  founded   Int?
+  venue     String?
+  website   String?
+  leagueId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  league  League   @relation(fields: [leagueId], references: [id])
+  players Player[]
+
+  @@map("teams")
+}
+
+model Player {
+  id           Int      @id @default(autoincrement())
+  name         String
+  firstName    String?
+  lastName     String?
+  dateOfBirth  String?
+  nationality  String?
+  position     String?
+  shirtNumber  Int?
+  photo        String?
+  marketValue  String?
+  contract     String?
+  teamId       Int?
+  leagueId     Int?
+  isCustom     Boolean  @default(false)
+  customUserId Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  team           Team?            @relation(fields: [teamId], references: [id])
+  league         League?          @relation(fields: [leagueId], references: [id])
+  customUser     User?            @relation("UserCustomPlayers", fields: [customUserId], references: [id])
+  lineupPlayers  LineupPlayer[]
+  favorites      PlayerFavorite[]
+
+  @@map("players")
+}
+
+model Formation {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  code        String   @unique
+  description String?
+  positions   String // JSON string of positions
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  lineups Lineup[]
+
+  @@map("formations")
+}
+
+model Lineup {
+  id          Int      @id @default(autoincrement())
+  title       String?
+  subtitle    String?
+  userId      Int
+  formationId Int
+  captain     Int? // Player ID of the captain
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User           @relation(fields: [userId], references: [id])
+  formation Formation      @relation(fields: [formationId], references: [id])
+  players   LineupPlayer[]
+
+  @@map("lineups")
+}
+
+model LineupPlayer {
+  id         Int    @id @default(autoincrement())
+  lineupId   Int
+  playerId   Int
+  position   String
+  positionX  Float
+  positionY  Float
+  isCaptain  Boolean @default(false)
+  isBench    Boolean @default(false)
+
+  lineup Lineup @relation(fields: [lineupId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@unique([lineupId, position])
+  @@map("lineup_players")
+}
+
+model PlayerFavorite {
+  id       Int @id @default(autoincrement())
+  userId   Int
+  playerId Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@unique([userId, playerId])
+  @@map("player_favorites")
+}
