@@ -37,60 +37,32 @@ const MOCK_PLAYERS = [
 ]
 
 // Football API search function
-interface APIPlayer {
-  strPlayer: string
-  strNationality: string
-  strPosition: string
-  strThumb?: string
-  strTeam: string
-  strLeague?: string
-  strNumber?: string
-}
-
 async function searchPlayers(query: string): Promise<Player[]> {
   if (!query || query.length < 2) return []
   
   try {
-    // Using a free football API (you can replace with any football API)
-    const response = await fetch(`https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${encodeURIComponent(query)}`)
+    console.log('Searching for:', query)
+    
+    // Use our Next.js API route instead of direct API call
+    const response = await fetch(`/api/search-players?q=${encodeURIComponent(query)}`)
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
     const data = await response.json()
+    console.log('API Response:', data)
     
-    if (!data.player) return []
+    if (data.error) {
+      throw new Error(data.error)
+    }
     
-    return data.player.slice(0, 20).map((player: APIPlayer, index: number) => ({
-      id: Date.now() + index, // Generate unique ID
-      name: player.strPlayer,
-      firstName: player.strPlayer?.split(' ')[0] || '',
-      lastName: player.strPlayer?.split(' ').slice(1).join(' ') || '',
-      nationality: player.strNationality,
-      position: mapPosition(player.strPosition),
-      photo: player.strThumb || undefined, // Only use if available
-      teamName: player.strTeam,
-      leagueName: player.strLeague || 'Unknown',
-      shirtNumber: parseInt(player.strNumber || '0') || undefined,
-      isCustom: false
-    }))
+    console.log('Processed players:', data.players)
+    return data.players || []
   } catch (error) {
     console.error('Error searching players:', error)
-    return []
+    throw error // Re-throw to be handled by the calling function
   }
-}
-
-// Map API positions to our position format
-function mapPosition(apiPosition: string): string {
-  if (!apiPosition) return 'ST'
-  
-  const position = apiPosition.toLowerCase()
-  if (position.includes('goalkeeper') || position.includes('keeper')) return 'GK'
-  if (position.includes('defender') || position.includes('back')) return 'CB'
-  if (position.includes('midfielder') || position.includes('midfield')) return 'CM'
-  if (position.includes('forward') || position.includes('striker') || position.includes('winger')) return 'ST'
-  if (position.includes('left') && position.includes('back')) return 'LB'
-  if (position.includes('right') && position.includes('back')) return 'RB'
-  if (position.includes('left') && position.includes('wing')) return 'LW'
-  if (position.includes('right') && position.includes('wing')) return 'RW'
-  
-  return 'ST' // Default position
 }
 
 export function ControlPanel() {
@@ -140,11 +112,15 @@ export function ControlPanel() {
 
       setIsSearching(true)
       try {
+        console.log('Starting search for:', query)
         const players = await searchPlayers(query)
+        console.log('Search completed, found:', players.length, 'players')
         setAvailablePlayers(players)
       } catch (error) {
         console.error('Search failed:', error)
         setAvailablePlayers([])
+        // Show error message to user
+        alert(`Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
       } finally {
         setIsSearching(false)
       }
