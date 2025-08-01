@@ -95,7 +95,6 @@ export function ControlPanel() {
     title,
     subtitle,
     formation,
-    searchTerm,
     selectedLeague,
     selectedPosition,
     selectedNationality,

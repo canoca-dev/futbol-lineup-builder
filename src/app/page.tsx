@@ -14,8 +14,7 @@ export default function Home() {
     draggedPlayer,
     setDraggedPlayer,
     addPlayerToPosition,
-    movePlayer,
-    getPositionPlayer
+    movePlayer
   } = useLineupStore()
 
   const [mounted, setMounted] = useState(false)

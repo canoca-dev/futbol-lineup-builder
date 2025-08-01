@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useDraggable } from '@dnd-kit/core'
-import { Heart, Crown } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { Player } from '@/store/lineup-store'
 import { cn, getPositionColor, generatePlayerAvatar } from '@/lib/utils'
 
@@ -73,15 +74,19 @@ export function PlayerCard({
             "rounded-full bg-gray-700 border-2 border-emerald-400 mb-1 flex items-center justify-center overflow-hidden"
           )}>
             {player.photo ? (
-              <img 
+              <Image 
                 src={player.photo} 
                 alt={player.name}
+                width={100}
+                height={100}
                 className="w-full h-full object-cover"
               />
             ) : (
-              <img 
+              <Image 
                 src={generatePlayerAvatar(player.name)} 
                 alt={player.name}
+                width={100}
+                height={100}
                 className="w-full h-full object-cover"
               />
             )}
@@ -135,15 +140,19 @@ export function PlayerCard({
           "rounded-full border-2 border-gray-600 group-hover:border-emerald-400 transition-colors mb-1 flex items-center justify-center overflow-hidden relative"
         )}>
           {player.photo ? (
-            <img 
+            <Image 
               src={player.photo} 
               alt={player.name}
+              width={100}
+              height={100}
               className="w-full h-full object-cover"
             />
           ) : (
-            <img 
+            <Image 
               src={generatePlayerAvatar(player.name)} 
               alt={player.name}
+              width={100}
+              height={100}
               className="w-full h-full object-cover"
             />
           )}
