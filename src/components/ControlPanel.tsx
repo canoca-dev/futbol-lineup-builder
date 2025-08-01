@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Filter, Heart, Download, Share2, RotateCcw, Settings } from 'lucide-react'
-import { useLineupStore } from '@/store/lineup-store'
+import { useLineupStore, Player } from '@/store/lineup-store'
 import { FORMATIONS } from '@/lib/formations'
 import { PlayerCard } from './PlayerCard'
 import { cn, debounce } from '@/lib/utils'
@@ -17,7 +17,6 @@ const MOCK_PLAYERS = [
     lastName: "Messi",
     nationality: "Argentina",
     position: "RW",
-    photo: "https://img.a.transfermarkt.technology/portrait/header/28003-1671435885.jpg",
     teamName: "Inter Miami",
     leagueName: "MLS",
     shirtNumber: 10,
@@ -30,336 +29,69 @@ const MOCK_PLAYERS = [
     lastName: "Ronaldo",
     nationality: "Portugal",
     position: "ST",
-    photo: "https://img.a.transfermarkt.technology/portrait/header/8198-1694609670.jpg",
     teamName: "Al Nassr",
     leagueName: "Saudi Pro League",
     shirtNumber: 7,
     isCustom: false
-  },
-  {
-    id: 3,
-    name: "Kylian Mbappé",
-    firstName: "Kylian",
-    lastName: "Mbappé",
-    nationality: "France",
-    position: "LW",
-    photo: "https://img.a.transfermarkt.technology/portrait/header/342229-1671435885.jpg",
-    teamName: "Real Madrid",
-    leagueName: "La Liga",
-    shirtNumber: 9,
-    isCustom: false
-  },
-  {
-    id: 4,
-    name: "Erling Haaland",
-    firstName: "Erling",
-    lastName: "Haaland",
-    nationality: "Norway",
-    position: "ST",
-    photo: "https://img.a.transfermarkt.technology/portrait/header/418560-1671435885.jpg",
-    teamName: "Manchester City",
-    leagueName: "Premier League",
-    shirtNumber: 9,
-    isCustom: false
-  },
-  {
-    id: 5,
-    name: "Kevin De Bruyne",
-    firstName: "Kevin",
-    lastName: "De Bruyne",
-    nationality: "Belgium",
-    position: "CAM",
-    photo: "https://img.a.transfermarkt.technology/portrait/header/88755-1671435885.jpg",
-    teamName: "Manchester City",
-    leagueName: "Premier League",
-    shirtNumber: 17,
-    isCustom: false
-  },
-  {
-    id: 6,
-    name: "Virgil van Dijk",
-    firstName: "Virgil",
-    lastName: "van Dijk",
-    nationality: "Netherlands",
-    position: "CB",
-    photo: "https://img.a.transfermarkt.technology/portrait/header/139208-1671435885.jpg",
-    teamName: "Liverpool",
-    leagueName: "Premier League",
-    shirtNumber: 4,
-    isCustom: false
-  },
-  // Premier League Players
-  {
-    id: 7,
-    name: "Mohamed Salah",
-    firstName: "Mohamed",
-    lastName: "Salah",
-    nationality: "Egypt",
-    position: "RW",
-    teamName: "Liverpool",
-    leagueName: "Premier League",
-    shirtNumber: 11,
-    isCustom: false
-  },
-  {
-    id: 8,
-    name: "Bukayo Saka",
-    firstName: "Bukayo",
-    lastName: "Saka",
-    nationality: "England",
-    position: "RW",
-    teamName: "Arsenal",
-    leagueName: "Premier League",
-    shirtNumber: 7,
-    isCustom: false
-  },
-  {
-    id: 9,
-    name: "Bruno Fernandes",
-    firstName: "Bruno",
-    lastName: "Fernandes",
-    nationality: "Portugal",
-    position: "CAM",
-    teamName: "Manchester United",
-    leagueName: "Premier League",
-    shirtNumber: 8,
-    isCustom: false
-  },
-  {
-    id: 10,
-    name: "Harry Kane",
-    firstName: "Harry",
-    lastName: "Kane",
-    nationality: "England",
-    position: "ST",
-    teamName: "Bayern Munich",
-    leagueName: "Bundesliga",
-    shirtNumber: 9,
-    isCustom: false
-  },
-  // La Liga Players
-  {
-    id: 11,
-    name: "Vinicius Jr",
-    firstName: "Vinicius",
-    lastName: "Jr",
-    nationality: "Brazil",
-    position: "LW",
-    teamName: "Real Madrid",
-    leagueName: "La Liga",
-    shirtNumber: 7,
-    isCustom: false
-  },
-  {
-    id: 12,
-    name: "Pedri",
-    firstName: "Pedri",
-    lastName: "González",
-    nationality: "Spain",
-    position: "CM",
-    teamName: "Barcelona",
-    leagueName: "La Liga",
-    shirtNumber: 8,
-    isCustom: false
-  },
-  {
-    id: 13,
-    name: "Luka Modrić",
-    firstName: "Luka",
-    lastName: "Modrić",
-    nationality: "Croatia",
-    position: "CM",
-    teamName: "Real Madrid",
-    leagueName: "La Liga",
-    shirtNumber: 10,
-    isCustom: false
-  },
-  {
-    id: 14,
-    name: "Robert Lewandowski",
-    firstName: "Robert",
-    lastName: "Lewandowski",
-    nationality: "Poland",
-    position: "ST",
-    teamName: "Barcelona",
-    leagueName: "La Liga",
-    shirtNumber: 9,
-    isCustom: false
-  },
-  // Serie A Players
-  {
-    id: 15,
-    name: "Victor Osimhen",
-    firstName: "Victor",
-    lastName: "Osimhen",
-    nationality: "Nigeria",
-    position: "ST",
-    teamName: "Napoli",
-    leagueName: "Serie A",
-    shirtNumber: 9,
-    isCustom: false
-  },
-  {
-    id: 16,
-    name: "Rafael Leão",
-    firstName: "Rafael",
-    lastName: "Leão",
-    nationality: "Portugal",
-    position: "LW",
-    teamName: "AC Milan",
-    leagueName: "Serie A",
-    shirtNumber: 10,
-    isCustom: false
-  },
-  // Bundesliga Players
-  {
-    id: 17,
-    name: "Jamal Musiala",
-    firstName: "Jamal",
-    lastName: "Musiala",
-    nationality: "Germany",
-    position: "CAM",
-    teamName: "Bayern Munich",
-    leagueName: "Bundesliga",
-    shirtNumber: 42,
-    isCustom: false
-  },
-  {
-    id: 18,
-    name: "Jude Bellingham",
-    firstName: "Jude",
-    lastName: "Bellingham",
-    nationality: "England",
-    position: "CM",
-    teamName: "Real Madrid",
-    leagueName: "La Liga",
-    shirtNumber: 5,
-    isCustom: false
-  },
-  // Goalkeepers
-  {
-    id: 19,
-    name: "Alisson Becker",
-    firstName: "Alisson",
-    lastName: "Becker",
-    nationality: "Brazil",
-    position: "GK",
-    teamName: "Liverpool",
-    leagueName: "Premier League",
-    shirtNumber: 1,
-    isCustom: false
-  },
-  {
-    id: 20,
-    name: "Manuel Neuer",
-    firstName: "Manuel",
-    lastName: "Neuer",
-    nationality: "Germany",
-    position: "GK",
-    teamName: "Bayern Munich",
-    leagueName: "Bundesliga",
-    shirtNumber: 1,
-    isCustom: false
-  },
-  {
-    id: 21,
-    name: "Thibaut Courtois",
-    firstName: "Thibaut",
-    lastName: "Courtois",
-    nationality: "Belgium",
-    position: "GK",
-    teamName: "Real Madrid",
-    leagueName: "La Liga",
-    shirtNumber: 1,
-    isCustom: false
-  },
-  // Defenders
-  {
-    id: 22,
-    name: "Rúben Dias",
-    firstName: "Rúben",
-    lastName: "Dias",
-    nationality: "Portugal",
-    position: "CB",
-    teamName: "Manchester City",
-    leagueName: "Premier League",
-    shirtNumber: 3,
-    isCustom: false
-  },
-  {
-    id: 23,
-    name: "Joško Gvardiol",
-    firstName: "Joško",
-    lastName: "Gvardiol",
-    nationality: "Croatia",
-    position: "CB",
-    teamName: "Manchester City",
-    leagueName: "Premier League",
-    shirtNumber: 24,
-    isCustom: false
-  },
-  {
-    id: 24,
-    name: "Alessandro Bastoni",
-    firstName: "Alessandro",
-    lastName: "Bastoni",
-    nationality: "Italy",
-    position: "LB",
-    teamName: "Inter Milan",
-    leagueName: "Serie A",
-    shirtNumber: 95,
-    isCustom: false
-  },
-  {
-    id: 25,
-    name: "Achraf Hakimi",
-    firstName: "Achraf",
-    lastName: "Hakimi",
-    nationality: "Morocco",
-    position: "RB",
-    teamName: "PSG",
-    leagueName: "Ligue 1",
-    shirtNumber: 2,
-    isCustom: false
-  },
-  // Turkish League Players
-  {
-    id: 26,
-    name: "Kerem Aktürkoğlu",
-    firstName: "Kerem",
-    lastName: "Aktürkoğlu",
-    nationality: "Turkey",
-    position: "LW",
-    teamName: "Galatasaray",
-    leagueName: "Süper Lig",
-    shirtNumber: 7,
-    isCustom: false
-  },
-  {
-    id: 27,
-    name: "Edin Džeko",
-    firstName: "Edin",
-    lastName: "Džeko",
-    nationality: "Bosnia and Herzegovina",
-    position: "ST",
-    teamName: "Fenerbahçe",
-    leagueName: "Süper Lig",
-    shirtNumber: 9,
-    isCustom: false
-  },
-  {
-    id: 28,
-    name: "Sebastian Szymański",
-    firstName: "Sebastian",
-    lastName: "Szymański",
-    nationality: "Poland",
-    position: "CAM",
-    teamName: "Fenerbahçe",
-    leagueName: "Süper Lig",
-    shirtNumber: 10,
-    isCustom: false
   }
 ]
+
+// Football API search function
+interface APIPlayer {
+  strPlayer: string
+  strNationality: string
+  strPosition: string
+  strThumb?: string
+  strTeam: string
+  strLeague?: string
+  strNumber?: string
+}
+
+async function searchPlayers(query: string): Promise<Player[]> {
+  if (!query || query.length < 2) return []
+  
+  try {
+    // Using a free football API (you can replace with any football API)
+    const response = await fetch(`https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${encodeURIComponent(query)}`)
+    const data = await response.json()
+    
+    if (!data.player) return []
+    
+    return data.player.slice(0, 20).map((player: APIPlayer, index: number) => ({
+      id: Date.now() + index, // Generate unique ID
+      name: player.strPlayer,
+      firstName: player.strPlayer?.split(' ')[0] || '',
+      lastName: player.strPlayer?.split(' ').slice(1).join(' ') || '',
+      nationality: player.strNationality,
+      position: mapPosition(player.strPosition),
+      photo: player.strThumb || undefined, // Only use if available
+      teamName: player.strTeam,
+      leagueName: player.strLeague || 'Unknown',
+      shirtNumber: parseInt(player.strNumber || '0') || undefined,
+      isCustom: false
+    }))
+  } catch (error) {
+    console.error('Error searching players:', error)
+    return []
+  }
+}
+
+// Map API positions to our position format
+function mapPosition(apiPosition: string): string {
+  if (!apiPosition) return 'ST'
+  
+  const position = apiPosition.toLowerCase()
+  if (position.includes('goalkeeper') || position.includes('keeper')) return 'GK'
+  if (position.includes('defender') || position.includes('back')) return 'CB'
+  if (position.includes('midfielder') || position.includes('midfield')) return 'CM'
+  if (position.includes('forward') || position.includes('striker') || position.includes('winger')) return 'ST'
+  if (position.includes('left') && position.includes('back')) return 'LB'
+  if (position.includes('right') && position.includes('back')) return 'RB'
+  if (position.includes('left') && position.includes('wing')) return 'LW'
+  if (position.includes('right') && position.includes('wing')) return 'RW'
+  
+  return 'ST' // Default position
+}
 
 export function ControlPanel() {
   const {
@@ -388,18 +120,43 @@ export function ControlPanel() {
 
   const [showFilters, setShowFilters] = useState(false)
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
 
-  // Initialize with mock data
+  // Initialize with empty array - players will come from search
   useEffect(() => {
-    setAvailablePlayers(MOCK_PLAYERS)
+    setAvailablePlayers([])
   }, [setAvailablePlayers])
 
-  const debouncedSearch = debounce((term: string) => {
-    setSearchTerm(term)
-  }, 300)
+  // Debounced search function
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedPlayerSearch = useCallback(
+    debounce(async (query: string) => {
+      if (query.length < 2) {
+        setAvailablePlayers(MOCK_PLAYERS.slice(0, 2)) // Show just 2 examples
+        setIsSearching(false)
+        return
+      }
+
+      setIsSearching(true)
+      try {
+        const players = await searchPlayers(query)
+        setAvailablePlayers(players)
+      } catch (error) {
+        console.error('Search failed:', error)
+        setAvailablePlayers([])
+      } finally {
+        setIsSearching(false)
+      }
+    }, 500),
+    [setAvailablePlayers]
+  )
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.target.value)
+    const query = e.target.value
+    setSearchQuery(query)
+    setSearchTerm(query)
+    debouncedPlayerSearch(query)
   }
 
   const filteredPlayers = getFilteredPlayers()
@@ -505,10 +262,16 @@ export function ControlPanel() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search players..."
+              placeholder="Search players (e.g. Messi, Ronaldo)..."
+              value={searchQuery}
               onChange={handleSearchChange}
               className="w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-emerald-500 focus:outline-none"
             />
+            {isSearching && (
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-500"></div>
+              </div>
+            )}
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -598,9 +361,37 @@ export function ControlPanel() {
 
       {/* Player List */}
       <div className="flex-1 overflow-y-auto">
-        {isLoading ? (
+        {isLoading || isSearching ? (
           <div className="flex items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+            <span className="ml-2 text-gray-400">
+              {isSearching ? 'Searching players...' : 'Loading...'}
+            </span>
+          </div>
+        ) : searchQuery.length < 2 ? (
+          <div className="text-center py-8 text-gray-400">
+            <Search className="w-12 h-12 mx-auto mb-4 text-gray-500" />
+            <p className="text-lg font-medium mb-2">Search for Players</p>
+            <p className="text-sm">Type at least 2 characters to search for football players</p>
+            <p className="text-xs mt-2 text-gray-500">Try: Messi, Ronaldo, Haaland, etc.</p>
+            
+            {/* Show sample players */}
+            {displayPlayers.length > 0 && (
+              <div className="mt-6">
+                <p className="text-sm text-gray-400 mb-3">Sample players:</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {displayPlayers.map((player) => (
+                    <PlayerCard
+                      key={player.id}
+                      player={player}
+                      size="sm"
+                      isFavorite={favorites.includes(player.id)}
+                      onToggleFavorite={() => toggleFavorite(player.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ) : displayPlayers.length > 0 ? (
           <div className="grid grid-cols-2 gap-3">
@@ -616,9 +407,11 @@ export function ControlPanel() {
           </div>
         ) : (
           <div className="text-center py-8 text-gray-400">
-            <p>No players found</p>
-            {activeTab === 'favorites' && (
+            <p>No players found for &quot;{searchQuery}&quot;</p>
+            {activeTab === 'favorites' ? (
               <p className="text-sm mt-2">Add players to favorites to see them here</p>
+            ) : (
+              <p className="text-sm mt-2">Try searching for different keywords</p>
             )}
           </div>
         )}
