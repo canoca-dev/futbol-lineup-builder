@@ -87,6 +87,277 @@ const MOCK_PLAYERS = [
     leagueName: "Premier League",
     shirtNumber: 4,
     isCustom: false
+  },
+  // Premier League Players
+  {
+    id: 7,
+    name: "Mohamed Salah",
+    firstName: "Mohamed",
+    lastName: "Salah",
+    nationality: "Egypt",
+    position: "RW",
+    teamName: "Liverpool",
+    leagueName: "Premier League",
+    shirtNumber: 11,
+    isCustom: false
+  },
+  {
+    id: 8,
+    name: "Bukayo Saka",
+    firstName: "Bukayo",
+    lastName: "Saka",
+    nationality: "England",
+    position: "RW",
+    teamName: "Arsenal",
+    leagueName: "Premier League",
+    shirtNumber: 7,
+    isCustom: false
+  },
+  {
+    id: 9,
+    name: "Bruno Fernandes",
+    firstName: "Bruno",
+    lastName: "Fernandes",
+    nationality: "Portugal",
+    position: "CAM",
+    teamName: "Manchester United",
+    leagueName: "Premier League",
+    shirtNumber: 8,
+    isCustom: false
+  },
+  {
+    id: 10,
+    name: "Harry Kane",
+    firstName: "Harry",
+    lastName: "Kane",
+    nationality: "England",
+    position: "ST",
+    teamName: "Bayern Munich",
+    leagueName: "Bundesliga",
+    shirtNumber: 9,
+    isCustom: false
+  },
+  // La Liga Players
+  {
+    id: 11,
+    name: "Vinicius Jr",
+    firstName: "Vinicius",
+    lastName: "Jr",
+    nationality: "Brazil",
+    position: "LW",
+    teamName: "Real Madrid",
+    leagueName: "La Liga",
+    shirtNumber: 7,
+    isCustom: false
+  },
+  {
+    id: 12,
+    name: "Pedri",
+    firstName: "Pedri",
+    lastName: "González",
+    nationality: "Spain",
+    position: "CM",
+    teamName: "Barcelona",
+    leagueName: "La Liga",
+    shirtNumber: 8,
+    isCustom: false
+  },
+  {
+    id: 13,
+    name: "Luka Modrić",
+    firstName: "Luka",
+    lastName: "Modrić",
+    nationality: "Croatia",
+    position: "CM",
+    teamName: "Real Madrid",
+    leagueName: "La Liga",
+    shirtNumber: 10,
+    isCustom: false
+  },
+  {
+    id: 14,
+    name: "Robert Lewandowski",
+    firstName: "Robert",
+    lastName: "Lewandowski",
+    nationality: "Poland",
+    position: "ST",
+    teamName: "Barcelona",
+    leagueName: "La Liga",
+    shirtNumber: 9,
+    isCustom: false
+  },
+  // Serie A Players
+  {
+    id: 15,
+    name: "Victor Osimhen",
+    firstName: "Victor",
+    lastName: "Osimhen",
+    nationality: "Nigeria",
+    position: "ST",
+    teamName: "Napoli",
+    leagueName: "Serie A",
+    shirtNumber: 9,
+    isCustom: false
+  },
+  {
+    id: 16,
+    name: "Rafael Leão",
+    firstName: "Rafael",
+    lastName: "Leão",
+    nationality: "Portugal",
+    position: "LW",
+    teamName: "AC Milan",
+    leagueName: "Serie A",
+    shirtNumber: 10,
+    isCustom: false
+  },
+  // Bundesliga Players
+  {
+    id: 17,
+    name: "Jamal Musiala",
+    firstName: "Jamal",
+    lastName: "Musiala",
+    nationality: "Germany",
+    position: "CAM",
+    teamName: "Bayern Munich",
+    leagueName: "Bundesliga",
+    shirtNumber: 42,
+    isCustom: false
+  },
+  {
+    id: 18,
+    name: "Jude Bellingham",
+    firstName: "Jude",
+    lastName: "Bellingham",
+    nationality: "England",
+    position: "CM",
+    teamName: "Real Madrid",
+    leagueName: "La Liga",
+    shirtNumber: 5,
+    isCustom: false
+  },
+  // Goalkeepers
+  {
+    id: 19,
+    name: "Alisson Becker",
+    firstName: "Alisson",
+    lastName: "Becker",
+    nationality: "Brazil",
+    position: "GK",
+    teamName: "Liverpool",
+    leagueName: "Premier League",
+    shirtNumber: 1,
+    isCustom: false
+  },
+  {
+    id: 20,
+    name: "Manuel Neuer",
+    firstName: "Manuel",
+    lastName: "Neuer",
+    nationality: "Germany",
+    position: "GK",
+    teamName: "Bayern Munich",
+    leagueName: "Bundesliga",
+    shirtNumber: 1,
+    isCustom: false
+  },
+  {
+    id: 21,
+    name: "Thibaut Courtois",
+    firstName: "Thibaut",
+    lastName: "Courtois",
+    nationality: "Belgium",
+    position: "GK",
+    teamName: "Real Madrid",
+    leagueName: "La Liga",
+    shirtNumber: 1,
+    isCustom: false
+  },
+  // Defenders
+  {
+    id: 22,
+    name: "Rúben Dias",
+    firstName: "Rúben",
+    lastName: "Dias",
+    nationality: "Portugal",
+    position: "CB",
+    teamName: "Manchester City",
+    leagueName: "Premier League",
+    shirtNumber: 3,
+    isCustom: false
+  },
+  {
+    id: 23,
+    name: "Joško Gvardiol",
+    firstName: "Joško",
+    lastName: "Gvardiol",
+    nationality: "Croatia",
+    position: "CB",
+    teamName: "Manchester City",
+    leagueName: "Premier League",
+    shirtNumber: 24,
+    isCustom: false
+  },
+  {
+    id: 24,
+    name: "Alessandro Bastoni",
+    firstName: "Alessandro",
+    lastName: "Bastoni",
+    nationality: "Italy",
+    position: "LB",
+    teamName: "Inter Milan",
+    leagueName: "Serie A",
+    shirtNumber: 95,
+    isCustom: false
+  },
+  {
+    id: 25,
+    name: "Achraf Hakimi",
+    firstName: "Achraf",
+    lastName: "Hakimi",
+    nationality: "Morocco",
+    position: "RB",
+    teamName: "PSG",
+    leagueName: "Ligue 1",
+    shirtNumber: 2,
+    isCustom: false
+  },
+  // Turkish League Players
+  {
+    id: 26,
+    name: "Kerem Aktürkoğlu",
+    firstName: "Kerem",
+    lastName: "Aktürkoğlu",
+    nationality: "Turkey",
+    position: "LW",
+    teamName: "Galatasaray",
+    leagueName: "Süper Lig",
+    shirtNumber: 7,
+    isCustom: false
+  },
+  {
+    id: 27,
+    name: "Edin Džeko",
+    firstName: "Edin",
+    lastName: "Džeko",
+    nationality: "Bosnia and Herzegovina",
+    position: "ST",
+    teamName: "Fenerbahçe",
+    leagueName: "Süper Lig",
+    shirtNumber: 9,
+    isCustom: false
+  },
+  {
+    id: 28,
+    name: "Sebastian Szymański",
+    firstName: "Sebastian",
+    lastName: "Szymański",
+    nationality: "Poland",
+    position: "CAM",
+    teamName: "Fenerbahçe",
+    leagueName: "Süper Lig",
+    shirtNumber: 10,
+    isCustom: false
   }
 ]
 
