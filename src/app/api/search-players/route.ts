@@ -33,7 +33,6 @@ export async function GET(request: NextRequest) {
       lastName: player.strPlayer?.split(' ').slice(1).join(' ') || '',
       nationality: player.strNationality,
       position: mapPosition(player.strPosition),
-      photo: player.strThumb || undefined,
       teamName: player.strTeam,
       leagueName: player.strLeague || 'Unknown',
       shirtNumber: parseInt(player.strNumber || '0') || undefined,
