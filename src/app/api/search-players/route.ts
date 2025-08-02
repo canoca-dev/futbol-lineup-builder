@@ -26,18 +26,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ players: [] })
     }
 
-    const players = data.player.slice(0, 20).map((player: Record<string, string>, index: number) => ({
-      id: Date.now() + index,
-      name: player.strPlayer,
-      firstName: player.strPlayer?.split(' ')[0] || '',
-      lastName: player.strPlayer?.split(' ').slice(1).join(' ') || '',
-      nationality: player.strNationality,
-      position: mapPosition(player.strPosition),
-      teamName: player.strTeam,
-      leagueName: player.strLeague || 'Unknown',
-      shirtNumber: parseInt(player.strNumber || '0') || undefined,
-      isCustom: false
-    }))
+    const players = data.player.slice(0, 20).map((player: Record<string, string>, index: number) => {
+      const photoUrl = player.strThumb || player.strCutout || null
+      console.log(`Player: ${player.strPlayer}, Photo: ${photoUrl}`)
+      
+      return {
+        id: Date.now() + index,
+        name: player.strPlayer,
+        firstName: player.strPlayer?.split(' ')[0] || '',
+        lastName: player.strPlayer?.split(' ').slice(1).join(' ') || '',
+        nationality: player.strNationality,
+        position: mapPosition(player.strPosition),
+        teamName: player.strTeam,
+        leagueName: player.strLeague || 'Unknown',
+        shirtNumber: parseInt(player.strNumber || '0') || undefined,
+        photoUrl: photoUrl,
+        isCustom: false
+      }
+    })
 
     return NextResponse.json({ players })
   } catch (error) {

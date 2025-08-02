@@ -371,15 +371,18 @@ export function ControlPanel() {
           </div>
         ) : displayPlayers.length > 0 ? (
           <div className="grid grid-cols-2 gap-3">
-            {displayPlayers.map((player) => (
-              <PlayerCard
-                key={player.id}
-                player={player}
-                size="sm"
-                isFavorite={favorites.includes(player.id)}
-                onToggleFavorite={() => toggleFavorite(player.id)}
-              />
-            ))}
+            {displayPlayers.map((player) => {
+              console.log('Rendering PlayerCard for:', player.name, 'isFavorite:', favorites.includes(player.id))
+              return (
+                <PlayerCard
+                  key={player.id}
+                  player={player}
+                  size="sm"
+                  isFavorite={favorites.includes(player.id)}
+                  onToggleFavorite={() => toggleFavorite(player.id)}
+                />
+              )
+            })}
           </div>
         ) : (
           <div className="text-center py-8 text-gray-400">

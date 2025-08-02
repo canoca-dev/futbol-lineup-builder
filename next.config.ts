@@ -5,20 +5,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'ui-avatars.com',
-        port: '',
-        pathname: '/api/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'img.a.transfermarkt.technology',
-        port: '',
+        hostname: 'www.thesportsdb.com',
         pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'www.thesportsdb.com',
-        port: '',
+        hostname: 'r2.thesportsdb.com',
         pathname: '/**',
       },
     ],

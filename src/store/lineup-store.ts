@@ -9,10 +9,10 @@ export interface Player {
   lastName?: string
   nationality?: string
   position?: string
-  photo?: string
   teamName?: string
   leagueName?: string
   shirtNumber?: number
+  photoUrl?: string
   isCustom: boolean
 }
 
@@ -211,12 +211,17 @@ export const useLineupStore = create<LineupState>()(
       },
       
       toggleFavorite: (playerId) => {
+        console.log('toggleFavorite called with playerId:', playerId)
         const state = get()
+        console.log('Current favorites:', state.favorites)
         if (state.favorites.includes(playerId)) {
+          console.log('Removing from favorites')
           state.removeFromFavorites(playerId)
         } else {
+          console.log('Adding to favorites')
           state.addToFavorites(playerId)
         }
+        console.log('New favorites:', get().favorites)
       },
       
       setShowBench: (showBench) => set({ showBench }),
