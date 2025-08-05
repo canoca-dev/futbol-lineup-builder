@@ -20,7 +20,8 @@ const MOCK_PLAYERS = [
     teamName: "Inter Miami",
     leagueName: "MLS",
     shirtNumber: 10,
-    isCustom: false
+    isCustom: false,
+    photoUrl: "https://cdn.lineup-builder.co.uk/images/player/30.png"
   },
   {
     id: 2,
@@ -32,7 +33,8 @@ const MOCK_PLAYERS = [
     teamName: "Al Nassr",
     leagueName: "Saudi Pro League",
     shirtNumber: 7,
-    isCustom: false
+    isCustom: false,
+    photoUrl: "https://cdn.lineup-builder.co.uk/images/player/20.png"
   }
 ]
 

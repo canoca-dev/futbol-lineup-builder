@@ -14,7 +14,11 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "sync:initial": "tsx scripts/sync.ts initial",
+    "sync:daily": "tsx scripts/sync.ts daily",
+    "sync:photos": "tsx scripts/sync.ts photos",
+    "sync:status": "tsx scripts/sync.ts status"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
